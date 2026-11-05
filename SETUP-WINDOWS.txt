@@ -1,0 +1,28 @@
+INNOVAHUB - WINDOWS LOCAL SETUP
+
+1. Open Command Prompt.
+2. Backend:
+   D:
+   cd \InnovaHub-Vercel-Ready\backend
+   npm install
+   copy .env.example .env
+   notepad .env
+
+   Put your real MongoDB connection string in MONGO_URI and a JWT_SECRET.
+   If using MongoDB Atlas, use the Atlas URI.
+
+   Start backend:
+   npm start
+
+3. Frontend (new Command Prompt):
+   D:
+   cd \InnovaHub-Vercel-Ready\frontend
+   npm install
+   npm run dev
+
+4. Open the Vite URL, normally http://localhost:5173.
+
+IMPORTANT:
+- The frontend Vite config proxies /api requests to http://localhost:5000.
+- Do NOT set VITE_API_URL to /api for a separate production server unless you also configure the corresponding proxy/deployment route.
+- If registration still fails, watch the BACKEND terminal while clicking Register. It will print REGISTRATION ERROR with the real cause.
