@@ -1,3 +1,4 @@
+
 const User = require("../models/User");
 const Idea = require("../models/Idea");
 const Like = require("../models/Like");
@@ -18,9 +19,16 @@ const registerUser = async (req, res) => {
       bio,
       profileImage
     } = req.body;
-    const normalizedEmail = String(email || "").trim().toLowerCase();
 
-    console.log("REGISTER REQUEST:", { name, email: normalizedEmail, role });
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
+
+    console.log("REGISTER REQUEST:", {
+      name,
+      email: normalizedEmail,
+      role
+    });
 
     if (!name || !normalizedEmail || !password) {
       return res.status(400).json({
@@ -28,7 +36,9 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email: normalizedEmail });
+    const existingUser = await User.findOne({
+      email: normalizedEmail
+    });
 
     if (existingUser) {
       return res.status(400).json({
@@ -60,9 +70,12 @@ const registerUser = async (req, res) => {
         profileImage: user.profileImage
       }
     });
+
   } catch (error) {
     console.error("REGISTRATION ERROR:", error);
+
     const status = error?.code === 11000 ? 400 : 500;
+
     res.status(status).json({
       message: error?.code === 11000
         ? "User already exists with this email"
@@ -72,18 +85,25 @@ const registerUser = async (req, res) => {
   }
 };
 
+
 // Login
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
+
+    if (!normalizedEmail || !password) {
       return res.status(400).json({
         message: "Email and password are required"
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email: normalizedEmail
+    });
 
     if (!user) {
       return res.status(401).json({
@@ -126,7 +146,10 @@ const loginUser = async (req, res) => {
         profileImage: user.profileImage
       }
     });
+
   } catch (error) {
+    console.error("LOGIN ERROR:", error);
+
     res.status(500).json({
       message: "Login failed",
       error: error.message
@@ -134,10 +157,12 @@ const loginUser = async (req, res) => {
   }
 };
 
+
 // Get current user
 const getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id)
+      .select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -148,6 +173,7 @@ const getCurrentUser = async (req, res) => {
     res.json({
       user
     });
+
   } catch (error) {
     res.status(500).json({
       message: "Unable to get user",
@@ -155,6 +181,7 @@ const getCurrentUser = async (req, res) => {
     });
   }
 };
+
 
 // Update profile
 const updateProfile = async (req, res) => {
@@ -204,6 +231,7 @@ const updateProfile = async (req, res) => {
         profileImage: user.profileImage
       }
     });
+
   } catch (error) {
     res.status(500).json({
       message: "Profile update failed",
@@ -269,6 +297,7 @@ const deleteAccount = async (req, res) => {
     res.status(200).json({
       message: "Account deleted successfully",
     });
+
   } catch (error) {
     console.error("Delete account error:", error);
 
