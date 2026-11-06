@@ -1,0 +1,22 @@
+# Environment files (never commit secrets)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+
+# Vercel
+.vercel/
+
+# OS/editor files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,34 @@
+INNOVAHUB - CORRECTED SOURCE PACKAGE
+
+Changes made:
+1. Registration now normalizes email addresses and checks existing addresses case-insensitively.
+2. Duplicate registrations return HTTP 409 with a clear message; duplicate emails are intentionally not allowed.
+3. Registration validates required fields and password length, and does not log submitted email addresses.
+4. Local dotenv loading points to backend/.env when starting the backend from the repository root.
+5. .gitignore now excludes environment files, dependencies, build output, and Vercel local files.
+6. Added backend/.env.example with placeholders only.
+
+SECURITY:
+- No .env files, credentials, node_modules, or .git metadata are included in this ZIP.
+- Use rotated MongoDB credentials and a new JWT secret in Vercel Environment Variables.
+- Do not upload a real .env file to GitHub.
+
+GITHUB UPDATE:
+1. Extract this ZIP.
+2. Copy the contents of the InnovaHub folder over your existing local repository folder.
+3. Keep your existing .git folder; do not replace it with anything from this ZIP (this ZIP contains no .git folder).
+4. From the existing repository root, run:
+   git status
+   git add .
+   git status
+5. Confirm no .env file is staged, then run:
+   git commit -m "Fix registration and deployment configuration"
+   git push origin main
+
+VERCEL:
+- A push to the connected main branch should trigger a deployment.
+- Confirm MONGO_URI, JWT_SECRET, and NODE_ENV=production are set in Vercel.
+- Check Vercel Runtime Logs if API requests fail.
+
+NOTE:
+A repeated email address is supposed to be rejected. If a genuinely new email is still reported as existing, inspect the MongoDB database/collection and the exact registration API response; this code cannot determine which database your deployed project is connected to.

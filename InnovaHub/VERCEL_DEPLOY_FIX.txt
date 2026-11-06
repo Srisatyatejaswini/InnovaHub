@@ -1,0 +1,9 @@
+InnovaHub Vercel API fix
+
+1. vercel.json explicitly configures api/index.js as a Node.js Vercel Function.
+2. /api/* is rewritten to /api/index so Express handles all API routes.
+3. Non-API routes are rewritten to the Vite SPA index.html.
+4. Frontend uses relative /api/... URLs; no localhost:5000 URLs were found in frontend/src.
+5. Root build installs frontend devDependencies so Vite is available during deployment.
+
+Deploy from the repository root with: npm run build
