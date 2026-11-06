@@ -1,0 +1,11 @@
+const User=require("../models/User");
+const Idea=require("../models/Idea");
+const Category=require("../models/Category");
+const Project=require("../models/Project");
+const getAnalytics=async(req,res)=>{try{const [users,ideas,projects,categories]=await Promise.all([User.countDocuments(),Idea.countDocuments(),Project.countDocuments(),Category.countDocuments()]);res.json({analytics:{users,ideas,projects,categories}});}catch(e){res.status(500).json({message:"Unable to load analytics"});}};
+const getUsers=async(req,res)=>{try{res.json({users:await User.find().select("-password").sort({createdAt:-1})});}catch(e){res.status(500).json({message:"Unable to load users"});}};
+const updateUser=async(req,res)=>{try{const u=await User.findById(req.params.id);if(!u)return res.status(404).json({message:"User not found"});if(req.body.role)u.role=req.body.role;if(req.body.name!==undefined)u.name=req.body.name;await u.save();res.json({user:u});}catch(e){res.status(500).json({message:"Unable to update user"});}};
+const deleteUser=async(req,res)=>{try{if(req.params.id===req.user.id)return res.status(400).json({message:"Admin cannot delete own account here"});await User.findByIdAndDelete(req.params.id);res.json({message:"User deleted"});}catch(e){res.status(500).json({message:"Unable to delete user"});}};
+const getAllIdeas=async(req,res)=>{try{res.json({ideas:await Idea.find().populate("creator","name email").sort({createdAt:-1})});}catch(e){res.status(500).json({message:"Unable to load ideas"});}};
+const updateIdeaStatus=async(req,res)=>{try{const i=await Idea.findByIdAndUpdate(req.params.id,{status:req.body.status},{new:true});if(!i)return res.status(404).json({message:"Idea not found"});res.json({idea:i});}catch(e){res.status(500).json({message:"Unable to update idea"});}};
+module.exports={getAnalytics,getUsers,updateUser,deleteUser,getAllIdeas,updateIdeaStatus};

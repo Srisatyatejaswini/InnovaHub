@@ -1,0 +1,2 @@
+const express=require("express");const protect=require("../middleware/authMiddleware");const roles=require("../middleware/roleMiddleware");const c=require("../controllers/mentorController");const r=express.Router();
+r.get("/",protect,c.getMentors);r.put("/profile",protect,roles("mentor","admin"),c.upsertMentor);r.get("/dashboard",protect,roles("mentor","admin"),c.getMentorDashboard);r.post("/ideas/:ideaId/review",protect,roles("mentor","admin"),c.reviewIdea);r.get("/ideas/:ideaId/reviews",protect,c.getIdeaReviews);module.exports=r;
